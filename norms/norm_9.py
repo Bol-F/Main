@@ -1,28 +1,24 @@
-import csv
 import logging
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    filename="newfile_9.log",
-    format='%(asctime)s -%(levelname)s- %(message)s',
-    filemode='a'
-)
+logging.basicConfig(level=logging.DEBUG,
+                    filename="newfile_9.log",
+                    format='%(asctime)s -%(levelname)s- %(message)s',
+                    filemode='a')
 logger = logging.getLogger()
 
 
 try:
     with open("norm_9.txt", newline="", encoding="utf-8") as file:
-        # file.read(0)
         reader = file.read()
         print(reader)
 except FileNotFoundError:
     logger.warning("File not found")
 
 
-# with open("norm_9.txt", mode="w", newline="") as file:
-#     file.write("this is a new line ")
-#     file.write("this is another line  ")
-#     file.write("this is another line ")
+with open("norm_9.txt", mode="w", newline="") as file:
+    file.write("this is a new line ")
+    file.write("this is another line  ")
+    file.write("this is another line ")
 
 
 try:

@@ -3,7 +3,7 @@ import csv
 
 logging.basicConfig(
     level=logging.DEBUG,
-    filename="newfile.log",
+    filename="newfile_6.log",
     format='%(asctime)s -%(levelname)s- %(message)s',
     filemode='a'
 )
@@ -17,13 +17,6 @@ try:
             print(row)
 except FileNotFoundError:
     logger.warning("File not found")
-
-
-# with open("output.csv", mode="w", newline="") as file:
-#     writer = csv.writer(file)
-#     writer.writerow(["a", "b", "c"])
-#     writer.writerow(["a", "b", "c"])
-#     writer.writerow(["a", "b", "c"])
 
 
 try:
