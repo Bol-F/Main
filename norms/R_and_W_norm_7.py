@@ -10,30 +10,3 @@ for line in lines:
 
 with open("csv_norm_7", "w") as file:
     file.writelines(updated_lines)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
