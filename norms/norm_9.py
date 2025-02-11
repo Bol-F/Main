@@ -26,5 +26,5 @@ try:
         read = file.read()
         print(read)
 except FileNotFoundError:
-    logger.warning("There is no such file")
+    logger.error("There is no such file")
     raise FileNotFoundError("This file does not exist")
