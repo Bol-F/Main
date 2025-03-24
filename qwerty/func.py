@@ -1,13 +1,8 @@
-# def sum_(a,b):
-#     return a+b
-#
-# print(sum_(2,3))
+def find_the_multiplication(a, b, c):
+    return a * b * c
 
-
-def diff21(n):
-  if n > 21:
-    return 2 * (n - 21)
-  else:
-    return n - 21
-
-
+def find_the_factorial(a):
+    if a == 0 or a == 1:
+        return 1
+    else:
+        return a * find_the_factorial(a - 1)

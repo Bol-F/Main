@@ -42,8 +42,8 @@ Infinite Loop (Be Careful!)
 An infinite loop happens when the condition never becomes False. Here’s an example:
 """
 
-while True:
-    print("This will run forever!")
+# while True:
+#     print("This will run forever!")
 
 """
 This loop will run endlessly and keep printing "This will run forever!" because True is always true.
