@@ -1,8 +1,5 @@
 """It is testing version. I should connect it with DB"""
 
-
-
-
 wallet = 1315
 attempt = 0
 my_card = 1001
@@ -81,6 +78,3 @@ def interface():
 
 
 interface()
-
-
-
