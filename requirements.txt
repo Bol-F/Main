@@ -1,3 +1,4 @@
 Django==5.1.7
+matplotlib==3.10.1
 numpy==2.2.4
-requests==2.32.3
+pyparsing==3.2.3
