@@ -23,7 +23,6 @@ yaqinlar.sort()
 print(yaqinlar)
 print(ismlar)
 
-
 nums = list(range(1, 101))
 print(nums[::-1])
 print(nums[:9])
@@ -40,8 +39,6 @@ sonlar.remove(9)
 sonlar = tuple(sonlar)
 print()
 
-
-
 talaba_baholari = {"Ali": {"Matematika": 5, "Ingliz tili": 4}}
 
 talaba_baholari.update({"Firdavs": {"Matematika": 4, "Ingliz tili": 5}})
@@ -53,7 +50,6 @@ talaba_baholari.pop("Talaba")
 print(talaba_baholari)
 
 # pop ozida qiymatni ushlab turadi
-
 
 
 for name, dict2 in talaba_baholari.items():
@@ -81,7 +77,7 @@ for name, dict2 in yangi_lugat.items():
     print(f'{name} o\'rta bahosi {a / s}')
     if a / s >= 3:
         new_dict.update({name: dict2})
-print('-' * 11)
+print('--' * 11)
 print(new_dict)
 
 bosgtoplam = set(range(10))
