@@ -1,2 +1,2 @@
-Hello, this is a new file!
-Second line of text.
+Hello, this is my file!
+this is for testing
