@@ -1,0 +1,11 @@
+2025-05-14 10:27:31.850556 - ERROR - TypeError: expected str, bytes or os.PathLike object, not module
+2025-05-14 10:28:22.219435 - ERROR - TypeError: expected str, bytes or os.PathLike object, not module
+2025-05-14 10:28:25.651273 - ERROR - TypeError: expected str, bytes or os.PathLike object, not module
+2025-05-14 10:50:09,931 - INFO - Successfully read 'this.txt'
+2025-05-14 10:50:09,932 - INFO - Successfully read 'file_operations.log'
+2025-05-14 10:51:18,474 - INFO - Successfully read 'this.txt'
+2025-05-14 10:51:18,474 - ERROR - FileNotFoundError: 'one.txt' not found
+2025-05-14 10:51:18,475 - INFO - Successfully read 'file_operations.log'
+2025-05-14 10:53:55,787 - INFO - Successfully read 'this.txt'
+2025-05-14 10:53:55,787 - ERROR - FileNotFoundError: 'one.txt' not found
+2025-05-14 10:53:55,787 - INFO - Successfully read 'file_operations.log'
