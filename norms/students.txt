@@ -1,0 +1,5 @@
+John Smith   - 85
+Emily Johnson   - 90
+Michael Brown   - 83
+Sarah Davis   - 92
+David Wilson   - 79
