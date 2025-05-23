@@ -1,0 +1,38 @@
+2025-05-23 12:43:38,647 - INFO - Calling mul_nums
+2025-05-23 12:43:38,647 - INFO - mul_nums is returned: 40
+2025-05-23 12:43:52,379 - INFO - Calling mul_nums
+2025-05-23 12:43:52,379 - INFO - mul_nums is returned: 40
+2025-05-23 12:43:52,379 - INFO - Calling add_nums
+2025-05-23 12:43:52,379 - INFO - add_nums is returned: 14
+2025-05-23 12:43:52,379 - INFO - Calling greatest_num
+2025-05-23 12:43:52,379 - INFO - greatest_num is returned: 8
+2025-05-23 12:44:57,827 - INFO - Calling mul_nums
+2025-05-23 12:44:57,827 - INFO - mul_nums is returned: 40
+2025-05-23 12:44:57,827 - INFO - Calling add_nums
+2025-05-23 12:44:57,867 - INFO - add_nums is returned: 14
+2025-05-23 12:44:57,867 - INFO - Calling greatest_num
+2025-05-23 12:44:57,867 - INFO - greatest_num is returned: 8
+2025-05-23 12:45:31,913 - INFO - Calling mul_nums
+2025-05-23 12:45:31,913 - INFO - mul_nums is returned: 40
+2025-05-23 12:45:31,913 - INFO - Calling add_nums
+2025-05-23 12:45:31,913 - INFO - add_nums is returned: 14
+2025-05-23 12:45:31,913 - INFO - Calling greatest_num
+2025-05-23 12:45:31,913 - INFO - greatest_num is returned: 8
+2025-05-23 12:46:06,821 - INFO - Calling mul_nums
+2025-05-23 12:46:06,822 - INFO - mul_nums is returned: 40
+2025-05-23 12:46:06,822 - INFO - Calling add_nums
+2025-05-23 12:46:06,822 - INFO - add_nums is returned: 14
+2025-05-23 12:46:06,822 - INFO - Calling greatest_num
+2025-05-23 12:46:06,822 - INFO - greatest_num is returned: 8
+2025-05-23 12:46:13,227 - INFO - Calling mul_nums
+2025-05-23 12:46:13,228 - INFO - mul_nums is returned: 40
+2025-05-23 12:46:13,228 - INFO - Calling add_nums
+2025-05-23 12:46:13,228 - INFO - add_nums is returned: 14
+2025-05-23 12:46:13,228 - INFO - Calling greatest_num
+2025-05-23 12:46:13,228 - INFO - greatest_num is returned: 8
+2025-05-23 12:46:25,906 - INFO - Calling mul_nums
+2025-05-23 12:46:25,906 - INFO - mul_nums is returned: 40
+2025-05-23 12:46:25,906 - INFO - Calling add_nums
+2025-05-23 12:46:25,906 - INFO - add_nums is returned: 14
+2025-05-23 12:46:25,906 - INFO - Calling greatest_num
+2025-05-23 12:46:25,906 - INFO - greatest_num is returned: 8
