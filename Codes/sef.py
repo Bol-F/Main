@@ -1,16 +1,15 @@
-import tkinter as tk
-import time
+import pandas as pd
 
-root = tk.Tk()
-root.attributes('-fullscreen', True)  # Полноэкранный режим
-canvas = tk.Canvas(root, width=root.winfo_screenwidth(), height=root.winfo_screenheight())
-canvas.pack()
+# Create some data
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 22],
+    'City': ['New York', 'Los Angeles', 'Chicago']
+}
 
-colors = ["red", "blue", "green", "black", "white"]
-i = 0
-while True:
-    canvas.create_rectangle(0, 0, root.winfo_screenwidth(), root.winfo_screenheight(), fill=colors[i % len(colors)])
-    canvas.update()
-    canvas.delete("all")
-    i += 1
-    time.sleep(0.01)  # Быстрая смена кадров
+df = pd.DataFrame(data)
+
+df.to_excel('output.xlsx', index=False)
+
+df = pd.read_excel('output.xlsx')
+print(df)
