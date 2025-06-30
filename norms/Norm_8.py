@@ -1,18 +1,22 @@
 import logging
 
-logging.basicConfig(filename='file_for_Norm8.log', filemode='a', level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    filename="file_for_Norm8.log",
+    filemode="a",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
 
 
 def log_decor(func):
     def inner(*args, **kwargs):
-        logging.info(f'Calling {func.__name__}')
+        logging.info(f"Calling {func.__name__}")
         try:
             ans = func(*args, **kwargs)
-            logging.info(f'{func.__name__} is returned: {ans}')
+            logging.info(f"{func.__name__} is returned: {ans}")
             return ans
         except Exception as e:
-            logging.error(f'{func.__name__} raised an exception: {e}')
+            logging.error(f"{func.__name__} raised an exception: {e}")
 
     return inner
 

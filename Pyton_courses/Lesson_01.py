@@ -8,26 +8,20 @@ which is super helpful for debugging and understanding your code’s behavior.
 print("Hello World")
 
 
-
-
-
 """
 In Python, assigning values to variables means giving a name to some data so you can use it later.
 You do this using the = sign.
 """
 
-x = 5        # x now holds the value 5
+x = 5  # x now holds the value 5
 name = "Bob"  # name now holds the string "Bob"
-price = 19.99 # price holds the float value 19.99
+price = 19.99  # price holds the float value 19.99
 
 """
 The variable name (like x, name, price) is on the left side.
 The value (like 5, "Bob", 19.99) is on the right side.
 Python saves the value in the variable, and you can use it later in the program.
 """
-
-
-
 
 
 """

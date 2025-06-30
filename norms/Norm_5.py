@@ -38,8 +38,6 @@ class Computer(ABC):
         self._price = value
 
 
-
-
 class Monoblock(Computer):
     def __init__(self, screen_size, brand, model, year, price):
         super().__init__(brand, model, year, price)
@@ -100,4 +98,3 @@ print("-" * 100)
 n.price = 1000
 print(n.price)
 n.price = -100
-

@@ -24,7 +24,13 @@ def checking():
 def show_balance():
     """Displays the account balance."""
     print(f"Your balance: {wallet}$\n")
-    print("1. Check balance", "2. Withdraw money", "3. Deposit money", "Enter '0' to exit\n", sep='\n')
+    print(
+        "1. Check balance",
+        "2. Withdraw money",
+        "3. Deposit money",
+        "Enter '0' to exit\n",
+        sep="\n",
+    )
 
 
 def withdraw_money():
@@ -40,7 +46,13 @@ def withdraw_money():
             wallet = str(wallet)
             print(f"{amount}$ withdrawn\nRemaining balance: {wallet}$\n")
             break
-    print("1. Check balance", "2. Withdraw money", "3. Deposit money", "Enter '0' to exit\n", sep='\n')
+    print(
+        "1. Check balance",
+        "2. Withdraw money",
+        "3. Deposit money",
+        "Enter '0' to exit\n",
+        sep="\n",
+    )
 
 
 def deposit_money():
@@ -51,7 +63,13 @@ def deposit_money():
     wallet += amount
     wallet = str(wallet)
     print(f"Your balance is now {wallet}$\nIncreased by {amount}$\n")
-    print("1. Check balance", "2. Withdraw money", "3. Deposit money", "Enter '0' to exit\n", sep='\n')
+    print(
+        "1. Check balance",
+        "2. Withdraw money",
+        "3. Deposit money",
+        "Enter '0' to exit\n",
+        sep="\n",
+    )
 
 
 def interface():
@@ -59,17 +77,23 @@ def interface():
     global attempt
     if checking() == -1:
         return  # Exit if card is blocked
-    print("1. Check balance", "2. Withdraw money", "3. Deposit money", "Enter '0' to exit\n", sep='\n')
+    print(
+        "1. Check balance",
+        "2. Withdraw money",
+        "3. Deposit money",
+        "Enter '0' to exit\n",
+        sep="\n",
+    )
 
     while True:
         choice = input("Enter a number: ")
-        if choice == '1':
+        if choice == "1":
             show_balance()
-        elif choice == '2':
+        elif choice == "2":
             withdraw_money()
-        elif choice == '3':
+        elif choice == "3":
             deposit_money()
-        elif choice == '0':
+        elif choice == "0":
             break
         else:
             print("Please try again :/\n")

@@ -24,17 +24,17 @@ class BankAccount:
     def deposit(self, amount):
         if amount > 0:
             self.__balance += amount
-            print(f'{amount} deposited. New balance: {self.__balance}')
+            print(f"{amount} deposited. New balance: {self.__balance}")
         else:
-            print('Deposit amount must be positive')
+            print("Deposit amount must be positive")
 
     # Method to withdraw money
     def withdraw(self, amount):
         if 0 < amount <= self.__balance:
             self.__balance -= amount
-            print(f'{amount} withdrawn. New balance: {self.__balance}')
+            print(f"{amount} withdrawn. New balance: {self.__balance}")
         else:
-            print('Insufficient balance or invalid withdrawal amount')
+            print("Insufficient balance or invalid withdrawal amount")
 
     # Method to get the current balance
     def get_balance(self):
@@ -42,7 +42,7 @@ class BankAccount:
 
 
 # Create a BankAccount object
-account = BankAccount('Alice', 1000)
+account = BankAccount("Alice", 1000)
 
 # Accessing public attribute
 print(account.owner)  # Output: Alice
@@ -55,7 +55,7 @@ account.deposit(500)  # Output: 500 deposited. New balance: 1500
 account.withdraw(200)  # Output: 200 withdrawn. New balance: 1300
 
 # Getting the balance using a public method
-print(f'Current balance: {account.get_balance()}')  # Output: 1300
+print(f"Current balance: {account.get_balance()}")  # Output: 1300
 
 """         EXAMPLE No_2        """
 
@@ -73,9 +73,9 @@ class Student:
     def add_grade(self, grade):
         if 0 <= grade <= 100:
             self.__grades.append(grade)
-            print(f'Grade {grade} added.')
+            print(f"Grade {grade} added.")
         else:
-            print('Invalid grade')
+            print("Invalid grade")
 
     # Method to get the grades
     def get_grades(self):
@@ -87,7 +87,7 @@ class Student:
 
 
 # Create a Student object
-student = Student('John')
+student = Student("John")
 
 # Adding grades using public method
 student.add_grade(85)
@@ -97,8 +97,8 @@ student.add_grade(92)
 # print(student.__grades)
 
 # Using public methods to interact with private attribute
-print(f'Grades: {student.get_grades()}')  # Output: [85, 92]
-print(f'Average Grade: {student.get_average_grade()}')  # Output: 88.5
+print(f"Grades: {student.get_grades()}")  # Output: [85, 92]
+print(f"Average Grade: {student.get_average_grade()}")  # Output: 88.5
 
 """         EXAMPLE No_3        """
 
@@ -117,17 +117,17 @@ class Car:
     def start_engine(self):
         if not self.__engine_running:
             self.__engine_running = True
-            print(f'{self.make} {self.model} engine started.')
+            print(f"{self.make} {self.model} engine started.")
         else:
-            print(f'{self.make} {self.model} engine is already running.')
+            print(f"{self.make} {self.model} engine is already running.")
 
     # Method to stop the engine
     def stop_engine(self):
         if self.__engine_running:
             self.__engine_running = False
-            print(f'{self.make} {self.model} engine stopped.')
+            print(f"{self.make} {self.model} engine stopped.")
         else:
-            print(f'{self.make} {self.model} engine is not running.')
+            print(f"{self.make} {self.model} engine is not running.")
 
     # Method to check if the engine is running
     def is_engine_running(self):
@@ -135,13 +135,13 @@ class Car:
 
 
 # Create a Car object
-car = Car('Toyota', 'Camry')
+car = Car("Toyota", "Camry")
 
 # Starting the engine using public method
 car.start_engine()  # Output: Toyota Camry engine started.
 
 # Checking engine state
-print(f'Is engine running? {car.is_engine_running()}')  # Output: True
+print(f"Is engine running? {car.is_engine_running()}")  # Output: True
 
 # Stopping the engine using public method
 car.stop_engine()  # Output: Toyota Camry engine stopped.

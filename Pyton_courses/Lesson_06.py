@@ -1,4 +1,4 @@
-"""  While Loop  """
+"""While Loop"""
 
 """
 Basic Structure of a while Loop
@@ -55,10 +55,6 @@ Usually, you’ll update the condition inside the loop so that it eventually bec
 """
 
 
-
-
-
-
 """  Using break and continue with while Loops  """
 
 
@@ -83,7 +79,6 @@ while i <= 10:
 # 4
 
 
-
 """
                                 continue Statement
 The continue statement skips the current iteration and moves to the next iteration of the loop.
@@ -102,7 +97,6 @@ while i < 5:
 # 2
 # 4
 # 5
-
 
 
 """
@@ -140,10 +134,6 @@ The loop’s body executes repeatedly, and you can control when the loop stops u
 continue, and ensuring that the condition eventually becomes False.
 The else block can be used with a while loop, but it runs only if the loop ends without a break.
 """
-
-
-
-
 
 
 """

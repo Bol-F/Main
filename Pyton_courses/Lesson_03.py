@@ -22,8 +22,6 @@ y = 3.14
 print(str(y))  # Output: "3.14" (converts float to string)
 
 
-
-
 """                Methods  (integer and floating)                       """
 
 """         abs() - Absolute Value
@@ -61,9 +59,6 @@ print(round(x))  # Output: 6 (rounds to the nearest integer)
 
 y = 3.14159
 print(round(y, 2))  # Output: 3.14 (rounds to 2 decimal places)
-
-
-
 
 
 """                 Methods (string)             """
@@ -119,9 +114,6 @@ Finds the position of a substring. If not found, it returns -1"""
 my_string = "hello world"
 print(my_string.find("world"))  # Output: 6
 print(my_string.find("Python"))  # Output: -1
-
-
-
 
 
 """

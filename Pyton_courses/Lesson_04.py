@@ -1,4 +1,4 @@
-"""       List       """
+"""List"""
 
 """
 A list is an ordered collection of items.
@@ -38,9 +38,6 @@ sublist = my_list[1:4]  # Get elements from index 1 to 3
 print(sublist)  # Output: [10, 4, 5]
 
 
-
-
-
 """       Tuple      """
 
 """
@@ -60,7 +57,6 @@ Indexed: You can access tuple elements using indexing (like lists).
 
 my_tuple = (1, 2, 3, 4)
 print(my_tuple)  # Output: (1, 2, 3, 4)
-
 
 
 # If you have a single element in a tuple, you need to add a comma after the element to make it a tuple
@@ -116,9 +112,6 @@ Tuples can be more memory-efficient and faster than lists when you have a fixed 
 Safety:
 Using tuples ensures that the data remains unchanged, which can be useful in certain situations where immutability is required
 """
-
-
-
 
 
 """   

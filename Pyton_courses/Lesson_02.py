@@ -1,12 +1,9 @@
 """Variables and Data Types"""
 
-first_name = "John"       # String
-my_age = 25            # Integer
-height = 5.9        # Float
-is_student = True   # Boolean
-
-
-
+first_name = "John"  # String
+my_age = 25  # Integer
+height = 5.9  # Float
+is_student = True  # Boolean
 
 
 """Basic Operations with Variables and Data Types
@@ -18,9 +15,9 @@ print(a + b)  # Addition
 print(a - b)  # Subtraction
 print(a * b)  # Multiplication
 print(a / b)  # Division (result is float)
-print(a // b) # Integer division (floor division)
+print(a // b)  # Integer division (floor division)
 print(a % b)  # Modulo (remainder)
-print(a ** b) # Exponentiation (a raised to the power of b)
+print(a**b)  # Exponentiation (a raised to the power of b)
 
 """                String Operations               """
 
@@ -58,9 +55,6 @@ y = 10
 print(x < 10 and y > 5)  # True because both conditions are True
 
 
-
-
-
 a = True
 b = False
 print(a or b)  # True because at least one condition is True
@@ -68,9 +62,6 @@ print(a or b)  # True because at least one condition is True
 x = 5
 y = 2
 print(x < 10 or y > 5)  # True because the first condition is True
-
-
-
 
 
 a = True
@@ -83,11 +74,9 @@ print(not b)  # True because "b" is False, so "not b" is True
 x = 7
 y = 10
 z = 5
-print(x < 10 and (y > 5 or z == 5))  # True because both parts of the expression are true
-
-
-
-
+print(
+    x < 10 and (y > 5 or z == 5)
+)  # True because both parts of the expression are true
 
 
 """

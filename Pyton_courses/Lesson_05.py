@@ -1,4 +1,4 @@
-"""  For loop  """
+"""For loop"""
 
 """
 Basic Structure of a for Loop
@@ -21,7 +21,7 @@ A collection of values you want to loop through (could be a list, string, etc.).
 
 """  Looping a list  """
 
-fruits = ['apple', 'banana', 'cherry']
+fruits = ["apple", "banana", "cherry"]
 
 for fruit in fruits:
     print(fruit)
@@ -45,7 +45,6 @@ for letter in word:
 # l
 # l
 # o
-
 
 
 """   Using range() with a for Loop   """
@@ -121,8 +120,6 @@ end=" " makes sure the numbers are printed on the same line, separated by spaces
 # 1 2 3
 # 4 5 6
 # 7 8 9
-
-
 
 
 """          

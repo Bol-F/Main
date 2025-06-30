@@ -1,8 +1,8 @@
 # 1
 """<”O’zbekiston Vatan”im meni!!!>
- so’zini console’ga chiqaramiz."""
+so’zini console’ga chiqaramiz."""
 
-print("<\"O'zbekiston Vatan\"im meni!!!>")
+print('<"O\'zbekiston Vatan"im meni!!!>')
 
 # 2
 """Code to find the time of the trip.
@@ -11,7 +11,7 @@ v = int(input("Enter a velocity (kilometers/hour) : "))
 d = int(input("Enter a distance (kilometers) : "))
 
 t = d / v
-print(f'{t} time takes to finish the road')
+print(f"{t} time takes to finish the road")
 
 
 # 4
@@ -29,16 +29,16 @@ print("New lines can be created with a \\ and the letter n")
 a = float(input("Enter a first num : "))
 b = float(input("Enter a second num : "))
 a, b = b, a
-print(f'printing a - {a}')
-print(f'printing b - {b}')
+print(f"printing a - {a}")
+print(f"printing b - {b}")
 
 # 6
 """Working with the f-strings"""
 
-kocha="Bog'bon"
-mahalla="Sog'bon"
-tuman="Bodomzor"
-viloyat="Samarqand"
+kocha = "Bog'bon"
+mahalla = "Sog'bon"
+tuman = "Bodomzor"
+viloyat = "Samarqand"
 
 new_str = f"{kocha} ko'chasi, {mahalla} mahallsi, {tuman} tumani, {viloyat} viloyati"
 
@@ -57,5 +57,5 @@ print(a + b)  # plus
 print(a - b)  # minus
 print(a * b)  # multiplication
 print(a / b)  # division
-print(a // b) # division (shows only whole part)
-print(a % b) # #division (shows only remainder)
+print(a // b)  # division (shows only whole part)
+print(a % b)  # #division (shows only remainder)

@@ -1,5 +1,4 @@
-"""     Dict    """
-
+"""Dict"""
 
 """
 A dictionary in Python is a built-in data structure that stores data in key-value pairs. 
@@ -17,7 +16,6 @@ my_dict = {
 Keys must be unique and immutable (strings, numbers, or tuples).
 Values can be any data type (numbers, strings, lists, other dictionaries, etc.).
 """
-
 
 
 """             Dictionary Methods & Operations             """
@@ -41,8 +39,6 @@ if "name" in my_dict:
     print("Key exists!")
 
 
-
-
 """         Looping Through a Dictionary            """
 
 for key, value in my_dict.items():
@@ -51,12 +47,8 @@ for key, value in my_dict.items():
 
 """         Nested Dictionaries            """
 
-users = {
-    "user1": {"name": "Alice", "age": 25},
-    "user2": {"name": "Bob", "age": 30}
-}
+users = {"user1": {"name": "Alice", "age": 25}, "user2": {"name": "Bob", "age": 30}}
 print(users["user1"]["name"])  # Alice
-
 
 
 """         Default Dictionary (collections.defaultdict)            """

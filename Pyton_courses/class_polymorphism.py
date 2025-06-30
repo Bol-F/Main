@@ -55,21 +55,21 @@ for person in (grandparent, parent, child, grandchild):
 class Animal:
     # Method sound for the Animal class
     def sound(self):
-        print('Some generic animal sound')
+        print("Some generic animal sound")
 
 
 # Define the Mammal class inheriting from Animal
 class Mammal(Animal):
     # Method sound overridden in Mammal class
     def sound(self):
-        print('Mammal makes a sound')
+        print("Mammal makes a sound")
 
 
 # Define the Bird class inheriting from Animal
 class Bird(Animal):
     # Method sound overridden in Bird class
     def sound(self):
-        print('Bird chirps')
+        print("Bird chirps")
 
 
 # Create instances of each class
