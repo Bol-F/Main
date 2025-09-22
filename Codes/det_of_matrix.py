@@ -19,12 +19,9 @@ def matrix_4x4(a, b, c, d, e, f, g, h, i, j, k, l, m, z, o, p):
     )
 
 
-import sys
-
 dimension = int(input("What is the dimension of your matrix ?\n:"))
 if dimension <= 1:
-    print("What ?\nReally nigga?")
-    sys.exit()
+    exit("What ?\nReally nigga?")
 
 elif dimension == 2:
     a = int(input("What is the a_00 ? \n:"))
@@ -36,7 +33,7 @@ elif dimension == 2:
     print(
         "det of your matrix is equal to this number  --->",
         matrix_2x2(a, b, c, d),
-        "\nU don't even find the determinant of 2x2 matrix\nWhat is the purpose fo ur existance \nTHINK ABOUT IT !!!",
+        "\nU don't even find the determinant of 2x2 matrix\nWhat is the purpose fo ur existence \nTHINK ABOUT IT !!!",
     )
 
 elif dimension == 3:

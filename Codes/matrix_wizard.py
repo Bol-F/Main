@@ -37,50 +37,52 @@ Number = Union[int, float, Fraction]
 # Enhanced Color System & Visual Effects
 # ============================================================================
 
+
 class Colors:
     """Enhanced color palette with gradients and effects"""
-    RESET = '\033[0m'
-    BOLD = '\033[1m'
-    DIM = '\033[2m'
-    ITALIC = '\033[3m'
-    UNDERLINE = '\033[4m'
-    BLINK = '\033[5m'
-    REVERSE = '\033[7m'
-    STRIKETHROUGH = '\033[9m'
+
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    DIM = "\033[2m"
+    ITALIC = "\033[3m"
+    UNDERLINE = "\033[4m"
+    BLINK = "\033[5m"
+    REVERSE = "\033[7m"
+    STRIKETHROUGH = "\033[9m"
 
     # Regular colors
-    BLACK = '\033[30m'
-    RED = '\033[31m'
-    GREEN = '\033[32m'
-    YELLOW = '\033[33m'
-    BLUE = '\033[34m'
-    MAGENTA = '\033[35m'
-    CYAN = '\033[36m'
-    WHITE = '\033[37m'
+    BLACK = "\033[30m"
+    RED = "\033[31m"
+    GREEN = "\033[32m"
+    YELLOW = "\033[33m"
+    BLUE = "\033[34m"
+    MAGENTA = "\033[35m"
+    CYAN = "\033[36m"
+    WHITE = "\033[37m"
 
     # Bright colors
-    BRIGHT_BLACK = '\033[90m'
-    BRIGHT_RED = '\033[91m'
-    BRIGHT_GREEN = '\033[92m'
-    BRIGHT_YELLOW = '\033[93m'
-    BRIGHT_BLUE = '\033[94m'
-    BRIGHT_MAGENTA = '\033[95m'
-    BRIGHT_CYAN = '\033[96m'
-    BRIGHT_WHITE = '\033[97m'
+    BRIGHT_BLACK = "\033[90m"
+    BRIGHT_RED = "\033[91m"
+    BRIGHT_GREEN = "\033[92m"
+    BRIGHT_YELLOW = "\033[93m"
+    BRIGHT_BLUE = "\033[94m"
+    BRIGHT_MAGENTA = "\033[95m"
+    BRIGHT_CYAN = "\033[96m"
+    BRIGHT_WHITE = "\033[97m"
 
     # Background colors
-    BG_BLACK = '\033[40m'
-    BG_RED = '\033[41m'
-    BG_GREEN = '\033[42m'
-    BG_YELLOW = '\033[43m'
-    BG_BLUE = '\033[44m'
-    BG_MAGENTA = '\033[45m'
-    BG_CYAN = '\033[46m'
-    BG_WHITE = '\033[47m'
+    BG_BLACK = "\033[40m"
+    BG_RED = "\033[41m"
+    BG_GREEN = "\033[42m"
+    BG_YELLOW = "\033[43m"
+    BG_BLUE = "\033[44m"
+    BG_MAGENTA = "\033[45m"
+    BG_CYAN = "\033[46m"
+    BG_WHITE = "\033[47m"
 
 
 def supports_colors() -> bool:
-    return sys.stdout.isatty() and os.getenv('TERM', '').lower() != 'dumb'
+    return sys.stdout.isatty() and os.getenv("TERM", "").lower() != "dumb"
 
 
 COLOR_ENABLED = supports_colors()
@@ -89,17 +91,24 @@ COLOR_ENABLED = supports_colors()
 def colorize(text: str, *codes: str) -> str:
     if not COLOR_ENABLED:
         return text
-    return ''.join(codes) + text + Colors.RESET
+    return "".join(codes) + text + Colors.RESET
 
 
 def rainbow_text(text: str) -> str:
     """Apply rainbow colors to text"""
     if not COLOR_ENABLED:
         return text
-    colors = [Colors.RED, Colors.YELLOW, Colors.GREEN, Colors.CYAN, Colors.BLUE, Colors.MAGENTA]
+    colors = [
+        Colors.RED,
+        Colors.YELLOW,
+        Colors.GREEN,
+        Colors.CYAN,
+        Colors.BLUE,
+        Colors.MAGENTA,
+    ]
     result = ""
     for i, char in enumerate(text):
-        if char != ' ':
+        if char != " ":
             result += colors[i % len(colors)] + char + Colors.RESET
         else:
             result += char
@@ -118,22 +127,25 @@ def gradient_text(text: str, start_color: str, end_color: str) -> str:
 # Advanced Spinner and Progress Indicators
 # ============================================================================
 
+
 class AdvancedSpinner:
     """Enhanced spinner with multiple styles and progress tracking"""
 
     STYLES = {
-        'dots': '⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏',
-        'line': '|/-\\',
-        'arrows': '←↖↑↗→↘↓↙',
-        'bouncing': '⠁⠂⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟',
-        'pulse': '●◐◑◒◓◔◕○',
-        'matrix': '█▉▊▋▌▍▎▏▎▍▌▋▊▉',
-        'fire': '🔥💥✨⭐🌟💫⚡',
+        "dots": "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏",
+        "line": "|/-\\",
+        "arrows": "←↖↑↗→↘↓↙",
+        "bouncing": "⠁⠂⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟",
+        "pulse": "●◐◑◒◓◔◕○",
+        "matrix": "█▉▊▋▌▍▎▏▎▍▌▋▊▉",
+        "fire": "🔥💥✨⭐🌟💫⚡",
     }
 
-    def __init__(self, message: str = "Processing", style: str = 'dots', color: str = Colors.CYAN):
+    def __init__(
+        self, message: str = "Processing", style: str = "dots", color: str = Colors.CYAN
+    ):
         self.message = message
-        self.style = self.STYLES.get(style, self.STYLES['dots'])
+        self.style = self.STYLES.get(style, self.STYLES["dots"])
         self.color = color
         self._running = False
         self._thread = None
@@ -159,7 +171,9 @@ class AdvancedSpinner:
                 break
 
             progress_bar = self._create_progress_bar()
-            spinner_text = f"\r{self.color}{frame} {self.message}{Colors.RESET} {progress_bar}"
+            spinner_text = (
+                f"\r{self.color}{frame} {self.message}{Colors.RESET} {progress_bar}"
+            )
 
             sys.stdout.write(spinner_text)
             sys.stdout.flush()
@@ -176,7 +190,7 @@ class AdvancedSpinner:
         return f"[{bar}] {percentage}"
 
     def _clear_line(self):
-        sys.stdout.write('\r' + ' ' * 80 + '\r')
+        sys.stdout.write("\r" + " " * 80 + "\r")
         sys.stdout.flush()
 
 
@@ -184,9 +198,11 @@ class AdvancedSpinner:
 # Matrix Operations and Analysis
 # ============================================================================
 
+
 @dataclass
 class MatrixStats:
     """Container for matrix statistics and properties"""
+
     determinant: Number
     trace: Number
     rank: int
@@ -210,14 +226,17 @@ class MatrixAnalyzer:
         trace = sum(matrix[i][i] for i in range(n))
 
         # Check symmetry
-        is_symmetric = all(matrix[i][j] == matrix[j][i]
-                           for i in range(n) for j in range(n))
+        is_symmetric = all(
+            matrix[i][j] == matrix[j][i] for i in range(n) for j in range(n)
+        )
 
         # Estimate rank (simplified)
         rank = MatrixAnalyzer._estimate_rank(matrix)
 
         # Check if singular
-        is_singular = abs(float(det)) < 1e-10 if isinstance(det, (int, float)) else det == 0
+        is_singular = (
+            abs(float(det)) < 1e-10 if isinstance(det, (int, float)) else det == 0
+        )
 
         return MatrixStats(
             determinant=det,
@@ -227,7 +246,7 @@ class MatrixAnalyzer:
             is_singular=is_singular,
             is_symmetric=is_symmetric,
             is_orthogonal=False,  # Simplified
-            eigenvalue_estimate=None
+            eigenvalue_estimate=None,
         )
 
     @staticmethod
@@ -267,7 +286,9 @@ class MatrixCalculator:
     """Enhanced determinant calculation with multiple algorithms"""
 
     @staticmethod
-    def determinant_recursive(matrix: List[List[Number]], progress_callback=None) -> Number:
+    def determinant_recursive(
+        matrix: List[List[Number]], progress_callback=None
+    ) -> Number:
         """Recursive determinant with progress tracking"""
 
         def _det_recursive(m: List[List[Number]], depth: int = 0) -> Number:
@@ -283,7 +304,7 @@ class MatrixCalculator:
             det = 0
             for j in range(n):
                 sign = (-1) ** j
-                minor = [row[:j] + row[j + 1:] for row in m[1:]]
+                minor = [row[:j] + row[j + 1 :] for row in m[1:]]
                 cofactor = _det_recursive(minor, depth + 1)
                 det += sign * m[0][j] * cofactor
 
@@ -295,7 +316,9 @@ class MatrixCalculator:
         return _det_recursive(matrix)
 
     @staticmethod
-    def determinant_lu(matrix: List[List[Number]], show_steps: bool = False) -> Tuple[Number, List[str]]:
+    def determinant_lu(
+        matrix: List[List[Number]], show_steps: bool = False
+    ) -> Tuple[Number, List[str]]:
         """LU decomposition with detailed steps"""
         n = len(matrix)
         m = [row[:] for row in matrix]
@@ -332,7 +355,9 @@ class MatrixCalculator:
                     m[k][j] -= factor * m[i][j]
 
                 if show_steps and factor != 0:
-                    steps.append(f"📉 R{k + 1} = R{k + 1} - {MatrixFormatter.format_number(factor)} × R{i + 1}")
+                    steps.append(
+                        f"📉 R{k + 1} = R{k + 1} - {MatrixFormatter.format_number(factor)} × R{i + 1}"
+                    )
 
         # Calculate determinant
         det = m[0][0]
@@ -344,7 +369,9 @@ class MatrixCalculator:
 
         if show_steps:
             steps.append("✅ Elimination complete!")
-            steps.append(f"🎯 Product of diagonal: {MatrixFormatter.format_number(det)}")
+            steps.append(
+                f"🎯 Product of diagonal: {MatrixFormatter.format_number(det)}"
+            )
             if swaps % 2:
                 steps.append(f"🔄 Applied sign change for {swaps} row swaps")
 
@@ -354,6 +381,7 @@ class MatrixCalculator:
 # ============================================================================
 # Enhanced Matrix Formatting and Display
 # ============================================================================
+
 
 class MatrixFormatter:
     """Advanced matrix formatting with styling options"""
@@ -382,7 +410,9 @@ class MatrixFormatter:
         return str(num)
 
     @staticmethod
-    def format_matrix(matrix: List[List[Number]], style: str = "box", highlight_diagonal: bool = False) -> str:
+    def format_matrix(
+        matrix: List[List[Number]], style: str = "box", highlight_diagonal: bool = False
+    ) -> str:
         """Format matrix with various visual styles"""
         if not matrix:
             return "∅ (empty matrix)"
@@ -400,7 +430,9 @@ class MatrixFormatter:
                 if highlight_diagonal and i == j:
                     formatted_val = colorize(formatted_val, Colors.BOLD, Colors.YELLOW)
                 formatted_row.append(formatted_val)
-                col_widths[j] = max(col_widths[j], len(MatrixFormatter.format_number(val)))
+                col_widths[j] = max(
+                    col_widths[j], len(MatrixFormatter.format_number(val))
+                )
             formatted_matrix.append(formatted_row)
 
         if style == "box":
@@ -424,7 +456,11 @@ class MatrixFormatter:
 
         for i, row in enumerate(matrix):
             # Row content
-            content = "│" + "│".join(f" {cell:>{widths[j]}} " for j, cell in enumerate(row)) + "│"
+            content = (
+                "│"
+                + "│".join(f" {cell:>{widths[j]}} " for j, cell in enumerate(row))
+                + "│"
+            )
             lines.append(content)
 
             # Middle border (except for last row)
@@ -461,7 +497,11 @@ class MatrixFormatter:
 
         lines.append(separator)
         for row in matrix:
-            content = "|" + "|".join(f" {cell:>{widths[j]}} " for j, cell in enumerate(row)) + "|"
+            content = (
+                "|"
+                + "|".join(f" {cell:>{widths[j]}} " for j, cell in enumerate(row))
+                + "|"
+            )
             lines.append(content)
             lines.append(separator)
 
@@ -481,6 +521,7 @@ class MatrixFormatter:
 # Matrix Gallery - Famous Matrices
 # ============================================================================
 
+
 class MatrixGallery:
     """Collection of famous and interesting matrices"""
 
@@ -489,40 +530,42 @@ class MatrixGallery:
             "name": "Identity Matrix (3×3)",
             "description": "The multiplicative identity for matrices",
             "matrix": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-            "expected_det": 1
+            "expected_det": 1,
         },
         "hilbert_3": {
             "name": "Hilbert Matrix (3×3)",
             "description": "Famous ill-conditioned matrix, H[i,j] = 1/(i+j-1)",
-            "matrix": [[Fraction(1, 1), Fraction(1, 2), Fraction(1, 3)],
-                       [Fraction(1, 2), Fraction(1, 3), Fraction(1, 4)],
-                       [Fraction(1, 3), Fraction(1, 4), Fraction(1, 5)]],
-            "expected_det": Fraction(1, 2160)
+            "matrix": [
+                [Fraction(1, 1), Fraction(1, 2), Fraction(1, 3)],
+                [Fraction(1, 2), Fraction(1, 3), Fraction(1, 4)],
+                [Fraction(1, 3), Fraction(1, 4), Fraction(1, 5)],
+            ],
+            "expected_det": Fraction(1, 2160),
         },
         "pascal_4": {
             "name": "Pascal Matrix (4×4)",
             "description": "Matrix with Pascal's triangle values",
             "matrix": [[1, 1, 1, 1], [1, 2, 3, 4], [1, 3, 6, 10], [1, 4, 10, 20]],
-            "expected_det": 1
+            "expected_det": 1,
         },
         "magic_3": {
             "name": "Magic Square (3×3)",
             "description": "All rows, columns, and diagonals sum to 15",
             "matrix": [[2, 7, 6], [9, 5, 1], [4, 3, 8]],
-            "expected_det": -360
+            "expected_det": -360,
         },
         "vandermonde_3": {
             "name": "Vandermonde Matrix (3×3)",
             "description": "V[i,j] = x_i^j, with x = [1, 2, 3]",
             "matrix": [[1, 1, 1], [1, 2, 4], [1, 3, 9]],
-            "expected_det": 2
+            "expected_det": 2,
         },
         "rotation_2d": {
             "name": "2D Rotation Matrix (45°)",
             "description": "Rotates vectors by 45 degrees",
             "matrix": [[0.707, -0.707], [0.707, 0.707]],
-            "expected_det": 1.0
-        }
+            "expected_det": 1.0,
+        },
     }
 
     @staticmethod
@@ -544,13 +587,16 @@ class MatrixGallery:
         for key, matrix_info in MatrixGallery.FAMOUS_MATRICES.items():
             print(f"\n📐 {colorize(matrix_info['name'], Colors.BOLD, Colors.CYAN)}")
             print(f"   {matrix_info['description']}")
-            print(f"   Expected determinant: {colorize(str(matrix_info['expected_det']), Colors.GREEN)}")
+            print(
+                f"   Expected determinant: {colorize(str(matrix_info['expected_det']), Colors.GREEN)}"
+            )
             print(f"   Command: --gallery {key}")
 
 
 # ============================================================================
 # Interactive Matrix Editor
 # ============================================================================
+
 
 class InteractiveEditor:
     """Interactive matrix editor with navigation and editing"""
@@ -594,12 +640,14 @@ class InteractiveEditor:
                             value_str = "0"
 
                         if self.exact_mode:
-                            if '/' in value_str:
+                            if "/" in value_str:
                                 value = Fraction(value_str)
                             else:
                                 value = Fraction(int(value_str))
                         else:
-                            value = float(value_str) if '.' in value_str else int(value_str)
+                            value = (
+                                float(value_str) if "." in value_str else int(value_str)
+                            )
 
                         self.matrix[i][j] = value
                         break
@@ -613,11 +661,12 @@ class InteractiveEditor:
 # File I/O Operations
 # ============================================================================
 
+
 def load_matrix_from_csv(filename: str, exact_mode: bool = False) -> List[List[Number]]:
     """Load matrix from CSV file"""
     try:
         matrix = []
-        with open(filename, 'r') as f:
+        with open(filename, "r") as f:
             reader = csv.reader(f)
             for row in reader:
                 matrix_row = []
@@ -627,12 +676,12 @@ def load_matrix_from_csv(filename: str, exact_mode: bool = False) -> List[List[N
                         continue
 
                     if exact_mode:
-                        if '/' in cell:
+                        if "/" in cell:
                             matrix_row.append(Fraction(cell))
                         else:
                             matrix_row.append(Fraction(int(cell)))
                     else:
-                        matrix_row.append(float(cell) if '.' in cell else int(cell))
+                        matrix_row.append(float(cell) if "." in cell else int(cell))
 
                 if matrix_row:  # Only add non-empty rows
                     matrix.append(matrix_row)
@@ -652,8 +701,9 @@ def load_matrix_from_csv(filename: str, exact_mode: bool = False) -> List[List[N
         sys.exit(1)
 
 
-def generate_random_matrix(size: int, exact_mode: bool = False,
-                           int_range: Tuple[int, int] = (-10, 10)) -> List[List[Number]]:
+def generate_random_matrix(
+    size: int, exact_mode: bool = False, int_range: Tuple[int, int] = (-10, 10)
+) -> List[List[Number]]:
     """Generate random matrix"""
     matrix = []
     for i in range(size):
@@ -674,6 +724,7 @@ def generate_random_matrix(size: int, exact_mode: bool = False,
 # Enhanced CLI with Rich Features
 # ============================================================================
 
+
 def print_ascii_art():
     """Display cool ASCII art header"""
     art = r"""
@@ -693,19 +744,24 @@ def print_ascii_art():
 
     if COLOR_ENABLED:
         # Apply rainbow effect to the art
-        lines = art.strip().split('\n')
+        lines = art.strip().split("\n")
         colored_lines = []
         for line in lines:
-            if '█' in line or '╗' in line or '║' in line:
+            if "█" in line or "╗" in line or "║" in line:
                 colored_lines.append(gradient_text(line, Colors.CYAN, Colors.MAGENTA))
             else:
                 colored_lines.append(colorize(line, Colors.BRIGHT_BLUE))
-        print('\n'.join(colored_lines))
+        print("\n".join(colored_lines))
     else:
         print(art)
 
-    print(colorize("✨ Enhanced with real-time analysis, interactive editing, and visual effects! ✨",
-                   Colors.BOLD, Colors.YELLOW))
+    print(
+        colorize(
+            "✨ Enhanced with real-time analysis, interactive editing, and visual effects! ✨",
+            Colors.BOLD,
+            Colors.YELLOW,
+        )
+    )
     print()
 
 
@@ -716,49 +772,59 @@ def benchmark_methods(matrix: List[List[Number]]) -> Dict[str, float]:
     # LU method
     start_time = time.time()
     det_lu, _ = MatrixCalculator.determinant_lu(matrix)
-    results['LU Decomposition'] = time.time() - start_time
+    results["LU Decomposition"] = time.time() - start_time
 
     # Recursive method (only for small matrices)
     if len(matrix) <= 6:
         start_time = time.time()
         det_recursive = MatrixCalculator.determinant_recursive(matrix)
-        results['Recursive'] = time.time() - start_time
+        results["Recursive"] = time.time() - start_time
 
     return results
 
 
-def export_results(matrix: List[List[Number]], analysis: MatrixStats, filename: str, format_type: str):
+def export_results(
+    matrix: List[List[Number]], analysis: MatrixStats, filename: str, format_type: str
+):
     """Export results to various formats"""
     data = {
-        'matrix': [[MatrixFormatter.format_number(cell) for cell in row] for row in matrix],
-        'determinant': MatrixFormatter.format_number(analysis.determinant),
-        'trace': MatrixFormatter.format_number(analysis.trace),
-        'rank': analysis.rank,
-        'is_singular': analysis.is_singular,
-        'is_symmetric': analysis.is_symmetric,
-        'timestamp': time.strftime('%Y-%m-%d %H:%M:%S')
+        "matrix": [
+            [MatrixFormatter.format_number(cell) for cell in row] for row in matrix
+        ],
+        "determinant": MatrixFormatter.format_number(analysis.determinant),
+        "trace": MatrixFormatter.format_number(analysis.trace),
+        "rank": analysis.rank,
+        "is_singular": analysis.is_singular,
+        "is_symmetric": analysis.is_symmetric,
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
     }
 
-    if format_type.lower() == 'json':
-        with open(filename, 'w') as f:
+    if format_type.lower() == "json":
+        with open(filename, "w") as f:
             json.dump(data, f, indent=2)
-    elif format_type.lower() == 'csv':
-        with open(filename, 'w', newline='') as f:
+    elif format_type.lower() == "csv":
+        with open(filename, "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(['Matrix'])
+            writer.writerow(["Matrix"])
             for row in matrix:
                 writer.writerow([MatrixFormatter.format_number(cell) for cell in row])
             writer.writerow([])
-            writer.writerow(['Property', 'Value'])
-            writer.writerow(['Determinant', MatrixFormatter.format_number(analysis.determinant)])
-            writer.writerow(['Trace', MatrixFormatter.format_number(analysis.trace)])
-            writer.writerow(['Rank', analysis.rank])
+            writer.writerow(["Property", "Value"])
+            writer.writerow(
+                ["Determinant", MatrixFormatter.format_number(analysis.determinant)]
+            )
+            writer.writerow(["Trace", MatrixFormatter.format_number(analysis.trace)])
+            writer.writerow(["Rank", analysis.rank])
 
     print(colorize(f"✅ Results exported to {filename}", Colors.GREEN))
 
 
-def display_matrix_analysis(matrix: List[List[Number]], analysis: MatrixStats,
-                            show_steps: bool = False, animate: bool = False):
+def display_matrix_analysis(
+    matrix: List[List[Number]],
+    analysis: MatrixStats,
+    show_steps: bool = False,
+    animate: bool = False,
+):
     """Display comprehensive matrix analysis"""
     print(colorize("📊 Matrix Analysis Report", Colors.BOLD, Colors.BLUE))
     print("=" * 60)
@@ -769,16 +835,23 @@ def display_matrix_analysis(matrix: List[List[Number]], analysis: MatrixStats,
 
     # Basic properties
     print(
-        f"\n🎯 {colorize('Determinant:', Colors.BOLD)} {colorize(MatrixFormatter.format_number(analysis.determinant), Colors.GREEN if not analysis.is_singular else Colors.RED)}")
-    print(f"🔢 {colorize('Trace:', Colors.BOLD)} {colorize(MatrixFormatter.format_number(analysis.trace), Colors.CYAN)}")
-    print(f"📏 {colorize('Rank:', Colors.BOLD)} {colorize(str(analysis.rank), Colors.YELLOW)}")
+        f"\n🎯 {colorize('Determinant:', Colors.BOLD)} {colorize(MatrixFormatter.format_number(analysis.determinant), Colors.GREEN if not analysis.is_singular else Colors.RED)}"
+    )
+    print(
+        f"🔢 {colorize('Trace:', Colors.BOLD)} {colorize(MatrixFormatter.format_number(analysis.trace), Colors.CYAN)}"
+    )
+    print(
+        f"📏 {colorize('Rank:', Colors.BOLD)} {colorize(str(analysis.rank), Colors.YELLOW)}"
+    )
 
     # Matrix properties
     print(f"\n🔍 {colorize('Matrix Properties:', Colors.BOLD)}")
     print(
-        f"   • Singular: {colorize('Yes' if analysis.is_singular else 'No', Colors.RED if analysis.is_singular else Colors.GREEN)}")
+        f"   • Singular: {colorize('Yes' if analysis.is_singular else 'No', Colors.RED if analysis.is_singular else Colors.GREEN)}"
+    )
     print(
-        f"   • Symmetric: {colorize('Yes' if analysis.is_symmetric else 'No', Colors.GREEN if analysis.is_symmetric else Colors.YELLOW)}")
+        f"   • Symmetric: {colorize('Yes' if analysis.is_symmetric else 'No', Colors.GREEN if analysis.is_symmetric else Colors.YELLOW)}"
+    )
 
     if show_steps:
         print(f"\n📝 {colorize('Calculation Steps (LU Decomposition):', Colors.BOLD)}")
@@ -788,7 +861,9 @@ def display_matrix_analysis(matrix: List[List[Number]], analysis: MatrixStats,
 
     if animate:
         print(f"\n{colorize('🎬 Animated calculation...', Colors.MAGENTA)}")
-        spinner = AdvancedSpinner("Calculating determinant", style='matrix', color=Colors.CYAN)
+        spinner = AdvancedSpinner(
+            "Calculating determinant", style="matrix", color=Colors.CYAN
+        )
         spinner.start()
         time.sleep(2)  # Simulate calculation
         spinner.stop()
@@ -806,53 +881,99 @@ Examples:
   %(prog)s --gallery hilbert_3 --exact           # Load Hilbert matrix with exact arithmetic
   %(prog)s --random 4 --benchmark                # Random 4x4 matrix with performance test
   %(prog)s --file matrix.csv --export results.json --format json
-        """
+        """,
     )
 
     # Input sources (mutually exclusive)
     input_group = parser.add_mutually_exclusive_group(required=True)
-    input_group.add_argument("--size", "-s", type=int, metavar="N",
-                             help="Create N×N matrix (interactive input)")
-    input_group.add_argument("--file", "-f", type=str, metavar="FILE",
-                             help="Load matrix from CSV file")
-    input_group.add_argument("--random", "-r", type=int, metavar="N",
-                             help="Generate random N×N matrix")
-    input_group.add_argument("--gallery", "-g", type=str, metavar="NAME",
-                             help="Load matrix from gallery", choices=MatrixGallery.list_matrices())
-    input_group.add_argument("--list-gallery", action="store_true",
-                             help="Show available matrices in gallery")
+    input_group.add_argument(
+        "--size",
+        "-s",
+        type=int,
+        metavar="N",
+        help="Create N×N matrix (interactive input)",
+    )
+    input_group.add_argument(
+        "--file", "-f", type=str, metavar="FILE", help="Load matrix from CSV file"
+    )
+    input_group.add_argument(
+        "--random", "-r", type=int, metavar="N", help="Generate random N×N matrix"
+    )
+    input_group.add_argument(
+        "--gallery",
+        "-g",
+        type=str,
+        metavar="NAME",
+        help="Load matrix from gallery",
+        choices=MatrixGallery.list_matrices(),
+    )
+    input_group.add_argument(
+        "--list-gallery", action="store_true", help="Show available matrices in gallery"
+    )
 
     # Calculation options
-    parser.add_argument("--method", "-m", choices=["lu", "recursive", "both"],
-                        default="lu", help="Calculation method (default: lu)")
-    parser.add_argument("--exact", "-e", action="store_true",
-                        help="Use exact arithmetic with fractions")
-    parser.add_argument("--steps", action="store_true",
-                        help="Show step-by-step calculation")
+    parser.add_argument(
+        "--method",
+        "-m",
+        choices=["lu", "recursive", "both"],
+        default="lu",
+        help="Calculation method (default: lu)",
+    )
+    parser.add_argument(
+        "--exact", "-e", action="store_true", help="Use exact arithmetic with fractions"
+    )
+    parser.add_argument(
+        "--steps", action="store_true", help="Show step-by-step calculation"
+    )
 
     # Visual options
-    parser.add_argument("--style", choices=["box", "brackets", "grid", "simple"],
-                        default="box", help="Matrix display style")
-    parser.add_argument("--animate", "-a", action="store_true",
-                        help="Show animated calculations")
-    parser.add_argument("--no-color", action="store_true",
-                        help="Disable colored output")
+    parser.add_argument(
+        "--style",
+        choices=["box", "brackets", "grid", "simple"],
+        default="box",
+        help="Matrix display style",
+    )
+    parser.add_argument(
+        "--animate", "-a", action="store_true", help="Show animated calculations"
+    )
+    parser.add_argument(
+        "--no-color", action="store_true", help="Disable colored output"
+    )
 
     # Analysis options
-    parser.add_argument("--benchmark", "-b", action="store_true",
-                        help="Benchmark different calculation methods")
-    parser.add_argument("--analyze", action="store_true", default=True,
-                        help="Perform comprehensive matrix analysis")
+    parser.add_argument(
+        "--benchmark",
+        "-b",
+        action="store_true",
+        help="Benchmark different calculation methods",
+    )
+    parser.add_argument(
+        "--analyze",
+        action="store_true",
+        default=True,
+        help="Perform comprehensive matrix analysis",
+    )
 
     # Export options
-    parser.add_argument("--export", type=str, metavar="FILE",
-                        help="Export results to file")
-    parser.add_argument("--format", choices=["json", "csv"], default="json",
-                        help="Export format (default: json)")
+    parser.add_argument(
+        "--export", type=str, metavar="FILE", help="Export results to file"
+    )
+    parser.add_argument(
+        "--format",
+        choices=["json", "csv"],
+        default="json",
+        help="Export format (default: json)",
+    )
 
     # Random matrix options
-    parser.add_argument("--range", type=int, nargs=2, default=[-10, 10],
-                        metavar=("MIN", "MAX"), help="Range for random values")
+    parser.add_argument(
+        "--range",
+        type=int,
+        nargs=2,
+        default=[-10, 10],
+        metavar=("MIN", "MAX"),
+        help="Range for random values",
+    )
 
     args = parser.parse_args()
 
@@ -875,25 +996,51 @@ Examples:
 
     try:
         if args.size:
-            print(colorize(f"🎛️  Creating {args.size}×{args.size} matrix", Colors.BOLD, Colors.CYAN))
+            print(
+                colorize(
+                    f"🎛️  Creating {args.size}×{args.size} matrix",
+                    Colors.BOLD,
+                    Colors.CYAN,
+                )
+            )
             editor = InteractiveEditor(args.size, args.exact)
             matrix = editor.edit_matrix()
 
         elif args.file:
-            print(colorize(f"📁 Loading matrix from {args.file}", Colors.BOLD, Colors.CYAN))
+            print(
+                colorize(
+                    f"📁 Loading matrix from {args.file}", Colors.BOLD, Colors.CYAN
+                )
+            )
             matrix = load_matrix_from_csv(args.file, args.exact)
 
         elif args.random:
-            print(colorize(f"🎲 Generating random {args.random}×{args.random} matrix", Colors.BOLD, Colors.CYAN))
+            print(
+                colorize(
+                    f"🎲 Generating random {args.random}×{args.random} matrix",
+                    Colors.BOLD,
+                    Colors.CYAN,
+                )
+            )
             matrix = generate_random_matrix(args.random, args.exact, tuple(args.range))
 
         elif args.gallery:
             matrix_info = MatrixGallery.get_matrix(args.gallery)
             if matrix_info:
-                print(colorize(f"🎨 Loading {matrix_info['name']} from gallery", Colors.BOLD, Colors.CYAN))
-                matrix = matrix_info['matrix']
+                print(
+                    colorize(
+                        f"🎨 Loading {matrix_info['name']} from gallery",
+                        Colors.BOLD,
+                        Colors.CYAN,
+                    )
+                )
+                matrix = matrix_info["matrix"]
             else:
-                print(colorize(f"❌ Matrix '{args.gallery}' not found in gallery!", Colors.RED))
+                print(
+                    colorize(
+                        f"❌ Matrix '{args.gallery}' not found in gallery!", Colors.RED
+                    )
+                )
                 return
 
         if matrix is None:
@@ -903,14 +1050,18 @@ Examples:
         # Validate matrix
         n = len(matrix)
         if n == 0 or not all(len(row) == n for row in matrix):
-            print(colorize("❌ Invalid matrix: must be square and non-empty!", Colors.RED))
+            print(
+                colorize("❌ Invalid matrix: must be square and non-empty!", Colors.RED)
+            )
             return
 
         print(colorize(f"\n✅ Matrix loaded successfully! ({n}×{n})", Colors.GREEN))
 
         # Perform analysis
         if args.animate:
-            spinner = AdvancedSpinner("Analyzing matrix", style='pulse', color=Colors.MAGENTA)
+            spinner = AdvancedSpinner(
+                "Analyzing matrix", style="pulse", color=Colors.MAGENTA
+            )
             spinner.start()
             time.sleep(1.5)  # Simulate analysis
 
@@ -924,7 +1075,9 @@ Examples:
 
         # Benchmark if requested
         if args.benchmark:
-            print(f"\n⏱️  {colorize('Performance Benchmark:', Colors.BOLD, Colors.YELLOW)}")
+            print(
+                f"\n⏱️  {colorize('Performance Benchmark:', Colors.BOLD, Colors.YELLOW)}"
+            )
             print("-" * 40)
 
             benchmark_results = benchmark_methods(matrix)
@@ -932,13 +1085,17 @@ Examples:
                 print(f"   {method:20}: {elapsed_time:.6f}s")
 
         # Verify against expected result if from gallery
-        if matrix_info and 'expected_det' in matrix_info:
-            expected = matrix_info['expected_det']
+        if matrix_info and "expected_det" in matrix_info:
+            expected = matrix_info["expected_det"]
             actual = analysis.determinant
 
             print(f"\n🎯 {colorize('Verification:', Colors.BOLD)}")
-            print(f"   Expected: {colorize(MatrixFormatter.format_number(expected), Colors.CYAN)}")
-            print(f"   Actual:   {colorize(MatrixFormatter.format_number(actual), Colors.CYAN)}")
+            print(
+                f"   Expected: {colorize(MatrixFormatter.format_number(expected), Colors.CYAN)}"
+            )
+            print(
+                f"   Actual:   {colorize(MatrixFormatter.format_number(actual), Colors.CYAN)}"
+            )
 
             # Check if values match (with tolerance for floating point)
             if isinstance(expected, (int, float)) and isinstance(actual, (int, float)):
@@ -946,7 +1103,11 @@ Examples:
             else:
                 match = expected == actual
 
-            status = colorize("✅ PASSED", Colors.GREEN) if match else colorize("❌ FAILED", Colors.RED)
+            status = (
+                colorize("✅ PASSED", Colors.GREEN)
+                if match
+                else colorize("❌ FAILED", Colors.RED)
+            )
             print(f"   Status:   {status}")
 
         # Export results if requested
@@ -956,12 +1117,18 @@ Examples:
         # Final summary
         print(f"\n{colorize('📋 Summary:', Colors.BOLD)}")
         print(f"   Matrix size: {n}×{n}")
-        print(f"   Determinant: {colorize(MatrixFormatter.format_number(analysis.determinant), Colors.BOLD)}")
-        print(f"   Matrix type: {'Singular' if analysis.is_singular else 'Non-singular'}")
+        print(
+            f"   Determinant: {colorize(MatrixFormatter.format_number(analysis.determinant), Colors.BOLD)}"
+        )
+        print(
+            f"   Matrix type: {'Singular' if analysis.is_singular else 'Non-singular'}"
+        )
         if analysis.is_symmetric:
             print(f"   Special: Symmetric matrix")
 
-        print(f"\n{rainbow_text('🎉 Calculation complete! Thank you for using Matrix Wizard! 🎉')}")
+        print(
+            f"\n{rainbow_text('🎉 Calculation complete! Thank you for using Matrix Wizard! 🎉')}"
+        )
 
     except KeyboardInterrupt:
         print(f"\n\n{colorize('⏹️  Operation cancelled by user.', Colors.YELLOW)}")
@@ -970,6 +1137,7 @@ Examples:
         print(f"\n{colorize(f'💥 Unexpected error: {e}', Colors.RED)}")
         if "--debug" in sys.argv:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
 
