@@ -74,9 +74,7 @@ print(not b)  # True because "b" is False, so "not b" is True
 x = 7
 y = 10
 z = 5
-print(
-    x < 10 and (y > 5 or z == 5)
-)  # True because both parts of the expression are true
+print(x < 10 and (y > 5 or z == 5))  # True because both parts of the expression are true
 
 
 """
