@@ -37,7 +37,9 @@ class MatrixCalculator:
         """Print colorful title."""
         if self.console:
             title = Text("🔢 MATRIX CALCULATOR 🔢", style="bold magenta")
-            subtitle = Text("Determinant & Rank Calculator (Max 6×6)", style="italic cyan")
+            subtitle = Text(
+                "Determinant & Rank Calculator (Max 6×6)", style="italic cyan"
+            )
 
             panel = Panel.fit(
                 Align.center(title + "\n" + subtitle),
@@ -157,7 +159,9 @@ class MatrixCalculator:
 
             # Get matrix elements
             matrix = np.zeros((rows, cols))
-            self.console.print(f"\n[yellow]Enter elements for {rows}×{cols} matrix:[/yellow]")
+            self.console.print(
+                f"\n[yellow]Enter elements for {rows}×{cols} matrix:[/yellow]"
+            )
 
             for i in range(rows):
                 for j in range(cols):
@@ -232,7 +236,9 @@ class MatrixCalculator:
                 if self.console:
                     properties = []
                     if abs(det) < 1e-10:
-                        properties.append("[yellow]• Singular (non-invertible)[/yellow]")
+                        properties.append(
+                            "[yellow]• Singular (non-invertible)[/yellow]"
+                        )
                     else:
                         properties.append("[green]• Non-singular (invertible)[/green]")
 
@@ -302,7 +308,9 @@ class MatrixCalculator:
 
         for i, example in enumerate(examples, 1):
             if self.console:
-                self.console.print(f"\n[bold yellow]Example {i}: {example['name']}[/bold yellow]")
+                self.console.print(
+                    f"\n[bold yellow]Example {i}: {example['name']}[/bold yellow]"
+                )
                 self.console.print(f"[dim]{example['description']}[/dim]")
             else:
                 print(f"\nExample {i}: {example['name']}")
@@ -410,12 +418,16 @@ def main():
         calculator.main_menu()
     except KeyboardInterrupt:
         if calculator.console:
-            calculator.console.print("\n[yellow]Program terminated by user. Goodbye! 👋[/yellow]")
+            calculator.console.print(
+                "\n[yellow]Program terminated by user. Goodbye! 👋[/yellow]"
+            )
         else:
             print("\nProgram terminated by user. Goodbye! 👋")
     except Exception as e:
         if calculator.console:
-            calculator.console.print(f"[bold red]An unexpected error occurred: {e}[/bold red]")
+            calculator.console.print(
+                f"[bold red]An unexpected error occurred: {e}[/bold red]"
+            )
         else:
             print(f"An unexpected error occurred: {e}")
 

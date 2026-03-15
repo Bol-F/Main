@@ -3,7 +3,11 @@ def matrix_2x2(a, b, c, d):
 
 
 def matrix_3x3(a, b, c, d, e, f, g, h, i):
-    return a * matrix_2x2(e, f, h, i) - b * matrix_2x2(d, f, g, i) + c * matrix_2x2(d, e, g, h)
+    return (
+        a * matrix_2x2(e, f, h, i)
+        - b * matrix_2x2(d, f, g, i)
+        + c * matrix_2x2(d, e, g, h)
+    )
 
 
 def matrix_4x4(a, b, c, d, e, f, g, h, i, j, k, l, m, z, o, p):

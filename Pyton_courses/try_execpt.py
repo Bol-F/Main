@@ -10,7 +10,6 @@ finally:
     # code, which will work anyways"""
 
 
-
 # except
 #
 # The except block runs if an error happens inside try.
@@ -25,7 +24,6 @@ try:
     x = 10 / 0
 except ZeroDivisionError:
     print("You cannot divide by zero")
-
 
 
 # The else block runs only if there was NO error in try.

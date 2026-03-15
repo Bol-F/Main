@@ -59,7 +59,9 @@ def main():
 
     print("\nLower-triangular matrix L:")
     for i in range(n):
-        print(" ".join(f"{L[i][j]:10.6f}" if j <= i else f"{0.0:10.6f}" for j in range(n)))
+        print(
+            " ".join(f"{L[i][j]:10.6f}" if j <= i else f"{0.0:10.6f}" for j in range(n))
+        )
 
     # --- Forward substitution: L*y = b ---
     y = [0.0] * n
