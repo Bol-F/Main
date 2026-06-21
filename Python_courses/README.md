@@ -14,20 +14,20 @@ This folder is a beginner Python course with extra interview preparation. The go
 
 | Order | File | Topic | What you should be able to do |
 | --- | --- | --- | --- |
-| 1 | `Lesson_01.py` | `print`, variables, `input` | Read user input and print useful output |
-| 2 | `Lesson_02.py` | Data types and operators | Work with strings, numbers, booleans, and arithmetic |
-| 3 | `Lesson_03.py` | Type conversion and methods | Convert values and use common string/number methods |
-| 4 | `Lesson_04.py` | Lists and tuples | Store multiple values, index, slice, unpack, and modify lists |
-| 5 | `Lesson_05.py` | `for` loops | Loop through ranges, strings, lists, and nested lists |
-| 6 | `Lesson_06.py` | `while` loops | Repeat work until a condition changes and use `break`/`continue` |
-| 7 | `Lesson_07.py` | Dictionaries | Store key-value data and count frequencies |
-| 8 | `Lesson_08.py` | Tuples and sets | Use immutable records and remove duplicates with sets |
-| 9 | `try_execpt.py` | Exceptions | Handle bad input and runtime errors safely |
-| 10 | `Lesson_09_functions.py` | Functions | Split programs into reusable, testable pieces |
-| 11 | `class_inheritance.py` | Inheritance | Reuse behavior between related classes |
-| 12 | `class_encapsulation.py` | Encapsulation | Protect object state behind methods |
-| 13 | `class_polymorphism.py` | Polymorphism | Use the same method name for different object behavior |
-| 14 | `class_abstraction.py` | Abstraction | Design a simple interface and hide implementation details |
+| 1 | `01_print_variables_input.py` | `print`, variables, `input` | Read user input and print useful output |
+| 2 | `02_data_types_and_operators.py` | Data types and operators | Work with strings, numbers, booleans, and arithmetic |
+| 3 | `03_type_conversion_and_methods.py` | Type conversion and methods | Convert values and use common string/number methods |
+| 4 | `04_lists_and_tuples.py` | Lists and tuples | Store multiple values, index, slice, unpack, and modify lists |
+| 5 | `05_for_loops.py` | `for` loops | Loop through ranges, strings, lists, and nested lists |
+| 6 | `06_while_loops.py` | `while` loops | Repeat work until a condition changes and use `break`/`continue` |
+| 7 | `07_dictionaries.py` | Dictionaries | Store key-value data and count frequencies |
+| 8 | `08_tuples_and_sets.py` | Tuples and sets | Use immutable records and remove duplicates with sets |
+| 9 | `09_error_handling_try_except.py` | Exceptions | Handle bad input and runtime errors safely |
+| 10 | `10_functions.py` | Functions | Split programs into reusable, testable pieces |
+| 11 | `11_oop_inheritance.py` | Inheritance | Reuse behavior between related classes |
+| 12 | `12_oop_encapsulation.py` | Encapsulation | Protect object state behind methods |
+| 13 | `13_oop_polymorphism.py` | Polymorphism | Use the same method name for different object behavior |
+| 14 | `14_oop_abstraction.py` | Abstraction | Design a simple interface and hide implementation details |
 
 ## Missing Topics To Add Next
 
