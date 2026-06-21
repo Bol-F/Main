@@ -62,12 +62,12 @@ print(f"Current balance: {account.get_balance()}")  # Output: 1300
 
 # Define the Student class
 class Student:
-    def __init__(self, name, grades=[]):
+    def __init__(self, name, grades=None):
         # Public attribute: name
         self.name = name
 
         # Private attribute: grades (indicated by double underscores)
-        self.__grades = grades
+        self.__grades = [] if grades is None else grades
 
     # Method to add a grade
     def add_grade(self, grade):
