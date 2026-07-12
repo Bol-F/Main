@@ -1,408 +1,337 @@
 from __future__ import annotations
 
 import argparse
-import ctypes
+import asyncio
+import glob
 import os
 import re
-import subprocess
 import sys
-import tempfile
-import urllib.request
-import wave
 from pathlib import Path
+from typing import Iterable
 
-MODEL_URL = "https://models.silero.ai/models/tts/ru/v5_cis_base_nostress.pt"
-MODEL_FILENAME = "v5_cis_base_nostress.pt"
-SPEAKER = "uzb_saida"
-SAMPLE_RATE = 48_000
+# ru-RU-SvetlanaNeural   Female
+# ru-RU-DariyaNeural     Female
+# ru-RU-DmitryNeural     Male
 
-EXPECTED_FILES = [
-    "Tanqidiy_pedagogika_savol_javob.txt",
-    "Ilmiy_tadqiqot_metodologiyasi_savol_javob.txt",
-    "Pedagogik_diagnostika_va_korreksiya_savol_javob.txt",
-]
+# en-US-JennyNeural    Female
+# en-US-AriaNeural     Female
+# en-US-AvaNeural      Female
+# en-US-EmmaNeural     Female
+#
+# en-US-GuyNeural      Male
+# en-US-AndrewNeural   Male
+# en-US-BrianNeural    Male
+# en-US-DavisNeural    Male
+
+try:
+    import edge_tts
+except ImportError:
+    print(
+        "Missing package: edge-tts\n"
+        "Install it with:\n"
+        "  python -m pip install edge-tts",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description=(
-            "Find three Uzbek question/answer TXT files on the Windows Desktop "
-            "and create three Uzbek MP3 files there."
-        )
+        description="Convert one or more TXT files to MP3.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=r"""
+Examples:
+  python text2speech.py text.txt
+  python text2speech.py text.txt next.txt other.txt
+  python text2speech.py "text.txt,next.txt,other.txt"
+  python text2speech.py "C:\Users\User\Desktop\*.txt"
+  python text2speech.py "C:\Users\User\Desktop"
+  python text2speech.py text.txt -o result.mp3
+  python text2speech.py text.txt next.txt --output-dir "C:\MP3"
+  python text2speech.py text.txt --language en-US
+  python text2speech.py text.txt --voice uz-UZ-MadinaNeural
+  python text2speech.py --list-voices --language uz-UZ
+  python text2speech.py --list-voices --language ru-female
+By default, every MP3 is saved beside its source TXT file.
+""",
+    )
+
+    parser.add_argument(
+        "inputs",
+        nargs="*",
+        help="TXT files, comma-separated files, folders, or wildcard patterns.",
     )
     parser.add_argument(
-        "--desktop",
+        "-o",
+        "--output",
         type=Path,
-        help="Optional Desktop folder path. Normally detected automatically.",
+        help="Exact MP3 path. Only valid with one input file.",
     )
     parser.add_argument(
-        "--test",
+        "--output-dir",
+        type=Path,
+        help="Folder where all generated MP3 files will be saved.",
+    )
+    parser.add_argument(
+        "--language",
+        default="uz-UZ",
+        help="Voice locale. Default: uz-UZ.",
+    )
+    parser.add_argument(
+        "--voice",
+        help="Exact voice name. When omitted, a voice is selected automatically.",
+    )
+    parser.add_argument(
+        "--gender",
+        choices=("Female", "Male"),
+        default="Female",
+        help="Preferred gender for automatic voice selection. Default: Female.",
+    )
+    parser.add_argument(
+        "--rate",
+        default="+0%",
+        help='Speech rate, for example "-10%%" or "+15%%". Default: +0%%.',
+    )
+    parser.add_argument(
+        "--volume",
+        default="+0%",
+        help='Volume, for example "-10%%" or "+20%%". Default: +0%%.',
+    )
+    parser.add_argument(
+        "--pitch",
+        default="+0Hz",
+        help='Pitch, for example "-10Hz" or "+5Hz". Default: +0Hz.',
+    )
+    parser.add_argument(
+        "--recursive",
         action="store_true",
-        help="Generate only the first three question/answer blocks from every TXT file.",
-    )
-    parser.add_argument(
-        "--speed",
-        type=float,
-        default=1.03,
-        help="Playback speed without pitch change (0.5-2.0, default: 1.03).",
+        help="Search folders recursively for TXT files.",
     )
     parser.add_argument(
         "--overwrite",
         action="store_true",
-        help="Replace existing MP3 files without asking.",
+        help="Replace an existing MP3 file.",
+    )
+    parser.add_argument(
+        "--list-voices",
+        action="store_true",
+        help="List voices, optionally filtered by --language, and exit.",
     )
     return parser.parse_args()
 
 
-def get_windows_desktop() -> Path:
-    """Get the real Windows Desktop folder, including OneDrive redirection."""
-    if os.name == "nt":
-        buffer = ctypes.create_unicode_buffer(32768)
-        # CSIDL_DESKTOPDIRECTORY = 0x0010
-        result = ctypes.windll.shell32.SHGetFolderPathW(None, 0x0010, None, 0, buffer)
-        if result == 0 and buffer.value:
-            return Path(buffer.value)
-
-    candidates = [
-        Path.home() / "Desktop",
-        Path.home() / "OneDrive" / "Desktop",
-        Path.home() / "Рабочий стол",
-    ]
-    for candidate in candidates:
-        if candidate.exists():
-            return candidate
-    return Path.home() / "Desktop"
+def split_input_arguments(values: Iterable[str]) -> list[str]:
+    result: list[str] = []
+    for value in values:
+        for part in value.split(","):
+            part = part.strip().strip('"').strip("'")
+            if part:
+                result.append(part)
+    return result
 
 
-def check_dependencies() -> None:
-    missing: list[str] = []
-    try:
-        import torch  # noqa: F401
-    except ImportError:
-        missing.append("torch")
-
-    try:
-        import numpy  # noqa: F401
-    except ImportError:
-        missing.append("numpy")
-
-    try:
-        import imageio_ffmpeg  # noqa: F401
-    except ImportError:
-        missing.append("imageio-ffmpeg")
-
-    if missing:
-        packages = " ".join(missing)
-        raise RuntimeError(
-            "Missing packages: "
-            + packages
-            + "\n\nInstall them in PowerShell:\n"
-            + "python -m pip install numpy imageio-ffmpeg\n"
-            + "python -m pip install torch --index-url "
-            + "https://download.pytorch.org/whl/cpu"
-        )
-
-
-def find_input_files(desktop: Path) -> list[Path]:
+def collect_txt_files(values: Iterable[str], recursive: bool) -> list[Path]:
     files: list[Path] = []
-    desktop_files = {p.name.lower(): p for p in desktop.glob("*.txt")}
 
-    for filename in EXPECTED_FILES:
-        exact = desktop / filename
-        if exact.exists():
-            files.append(exact)
+    for raw_value in split_input_arguments(values):
+        expanded = os.path.expandvars(os.path.expanduser(raw_value))
+        path = Path(expanded)
+
+        if path.is_file():
+            if path.suffix.lower() != ".txt":
+                raise ValueError(f"Not a TXT file: {path}")
+            files.append(path)
             continue
 
-        case_insensitive = desktop_files.get(filename.lower())
-        if case_insensitive:
-            files.append(case_insensitive)
+        if path.is_dir():
+            pattern = "**/*.txt" if recursive else "*.txt"
+            files.extend(item for item in path.glob(pattern) if item.is_file())
             continue
 
-        # Fallback: match the important words if the filename was slightly changed.
-        words = [
-            word
-            for word in re.split(r"[_\s]+", Path(filename).stem.lower())
-            if word not in {"savol", "javob"}
-        ]
         matches = [
-            path
-            for path in desktop.glob("*.txt")
-            if all(word in path.stem.lower() for word in words[:2])
+            Path(match)
+            for match in glob.glob(expanded, recursive=recursive)
+            if Path(match).is_file() and Path(match).suffix.lower() == ".txt"
         ]
-        if len(matches) == 1:
-            files.append(matches[0])
+        if matches:
+            files.extend(matches)
             continue
 
-        raise FileNotFoundError(
-            f"TXT file not found on Desktop:\n  {filename}\n\n"
-            f"Expected Desktop folder:\n  {desktop}"
-        )
+        raise FileNotFoundError(f"File, folder, or pattern not found: {raw_value}")
 
-    return files
+    unique: list[Path] = []
+    seen: set[str] = set()
+    for path in files:
+        resolved = path.resolve()
+        key = os.path.normcase(str(resolved))
+        if key not in seen:
+            seen.add(key)
+            unique.append(resolved)
+
+    if not unique:
+        raise FileNotFoundError("No TXT files found.")
+
+    return unique
 
 
-def read_text_file(path: Path) -> str:
-    encodings = ("utf-8-sig", "utf-8", "cp1251")
+def read_text(path: Path) -> str:
+    encodings = (
+        "utf-8-sig",
+        "utf-8",
+        "utf-16",
+        "utf-16-le",
+        "utf-16-be",
+        "cp1251",
+        "cp1252",
+    )
+
     for encoding in encodings:
         try:
-            return path.read_text(encoding=encoding)
-        except UnicodeDecodeError:
+            text = path.read_text(encoding=encoding)
+            text = text.replace("\x00", "")
+            text = re.sub(r"[ \t]+", " ", text)
+            text = re.sub(r"\n{3,}", "\n\n", text)
+            text = text.strip()
+            if text:
+                return text
+        except (UnicodeDecodeError, UnicodeError):
             continue
-    raise UnicodeError(f"Cannot decode text file: {path}")
+
+    raise UnicodeError(f"Could not read text encoding: {path}")
 
 
-def clean_text(text: str) -> str:
-    text = text.replace("\ufeff", "")
-    text = text.translate(
-        str.maketrans(
-            {
-                "’": "'",
-                "‘": "'",
-                "ʻ": "'",
-                "ʼ": "'",
-                "`": "'",
-                "–": "-",
-                "—": "-",
-            }
+def output_path_for(path: Path, args: argparse.Namespace, count: int) -> Path:
+    if args.output:
+        if count != 1:
+            raise ValueError("-o/--output can only be used with one TXT file.")
+        output = args.output.expanduser()
+        if output.suffix.lower() != ".mp3":
+            output = output.with_suffix(".mp3")
+        output.parent.mkdir(parents=True, exist_ok=True)
+        return output.resolve()
+
+    output_dir = args.output_dir.expanduser() if args.output_dir else path.parent
+    output_dir.mkdir(parents=True, exist_ok=True)
+    return (output_dir / f"{path.stem}.mp3").resolve()
+
+
+async def available_voices() -> list[dict]:
+    return await edge_tts.list_voices()
+
+
+async def choose_voice(language: str, requested: str | None, gender: str) -> str:
+    voices = await available_voices()
+
+    if requested:
+        names = {voice["ShortName"] for voice in voices}
+        if requested not in names:
+            raise ValueError(
+                f"Voice not found: {requested}\n"
+                "Run with --list-voices to see available voices."
+            )
+        return requested
+
+    locale_matches = [
+        voice for voice in voices if voice.get("Locale", "").lower() == language.lower()
+    ]
+    if not locale_matches:
+        raise ValueError(
+            f"No voice found for language locale: {language}\n"
+            "Run with --list-voices to see available locales."
         )
-    )
-    text = re.sub(r"[ \t]+", " ", text)
-    text = re.sub(r"\n[ \t]+", "\n", text)
-    text = re.sub(r"\n{3,}", "\n\n", text)
-    return text.strip()
+
+    preferred = [
+        voice for voice in locale_matches if voice.get("Gender") == gender
+    ]
+    selected = preferred[0] if preferred else locale_matches[0]
+    return selected["ShortName"]
 
 
-def split_question_blocks(text: str) -> list[str]:
-    """Split files formatted as 'Birinchi savol ... / Javob ...'."""
-    text = clean_text(text)
-    blocks = [block.strip() for block in re.split(r"\n\s*\n", text) if block.strip()]
-
-    # Fallback if blank lines were removed: split before every ordinal question line.
-    if len(blocks) <= 1:
-        pattern = re.compile(
-            r"(?mi)(?=^(?:Birinchi|Ikkinchi|Uchinchi|To'rtinchi|Beshinchi|"
-            r"Oltinchi|Yettinchi|Sakkizinchi|To'qqizinchi|O'ninchi|"
-            r"[A-Za-z'O‘’\- ]+inchi)\s+savol\s*:)"
-        )
-        blocks = [block.strip() for block in pattern.split(text) if block.strip()]
-
-    return blocks
-
-
-def sentence_split(text: str) -> list[str]:
-    one_line = re.sub(r"\s+", " ", text).strip()
-    if not one_line:
-        return []
-    return [
-        sentence.strip()
-        for sentence in re.split(r"(?<=[.!?])\s+", one_line)
-        if sentence.strip()
+async def list_voices(language: str) -> None:
+    voices = await available_voices()
+    filtered = [
+        voice
+        for voice in voices
+        if not language or voice.get("Locale", "").lower() == language.lower()
     ]
 
-
-def chunk_text(text: str, max_chars: int = 650) -> list[str]:
-    sentences = sentence_split(text)
-    if not sentences:
-        return []
-
-    chunks: list[str] = []
-    current = ""
-
-    for sentence in sentences:
-        if len(sentence) > max_chars:
-            words = sentence.split()
-            for word in words:
-                candidate = f"{current} {word}".strip()
-                if current and len(candidate) > max_chars:
-                    chunks.append(current)
-                    current = word
-                else:
-                    current = candidate
-            continue
-
-        candidate = f"{current} {sentence}".strip()
-        if current and len(candidate) > max_chars:
-            chunks.append(current)
-            current = sentence
-        else:
-            current = candidate
-
-    if current:
-        chunks.append(current)
-    return chunks
-
-
-def download_model(model_path: Path) -> None:
-    if model_path.exists() and model_path.stat().st_size > 10_000_000:
+    if not filtered:
+        print(f"No voices found for: {language}")
         return
 
-    model_path.parent.mkdir(parents=True, exist_ok=True)
-    print(f"Downloading the Uzbek neural voice model:\n  {model_path}")
-
-    def report(blocks: int, block_size: int, total_size: int) -> None:
-        if total_size > 0:
-            percent = min(100, blocks * block_size * 100 // total_size)
-            print(f"\rDownload: {percent:3d}%", end="", flush=True)
-
-    try:
-        urllib.request.urlretrieve(MODEL_URL, model_path, reporthook=report)
-    except Exception:
-        model_path.unlink(missing_ok=True)
-        raise
-    finally:
-        print()
+    for voice in filtered:
+        print(
+            f'{voice.get("ShortName", "")}  '
+            f'[{voice.get("Gender", "")}, {voice.get("Locale", "")}]'
+        )
 
 
-def load_model(model_path: Path):
-    import torch
-
-    torch.set_num_threads(max(1, min(8, os.cpu_count() or 4)))
-    model = torch.package.PackageImporter(str(model_path)).load_pickle(
-        "tts_models", "model"
-    )
-    model.to(torch.device("cpu"))
-    return torch, model
-
-
-def tensor_to_pcm16(audio) -> bytes:
-    import numpy as np
-
-    samples = audio.detach().cpu().float().flatten().numpy()
-    samples = np.nan_to_num(samples, nan=0.0, posinf=1.0, neginf=-1.0)
-    samples = np.clip(samples, -1.0, 1.0)
-    pcm = (samples * 32767.0).astype(np.int16)
-    return pcm.tobytes()
-
-
-def silence_pcm(seconds: float) -> bytes:
-    import numpy as np
-
-    return np.zeros(int(SAMPLE_RATE * seconds), dtype=np.int16).tobytes()
-
-
-def convert_wav_to_mp3(wav_path: Path, mp3_path: Path, speed: float) -> None:
-    if not 0.5 <= speed <= 2.0:
-        raise ValueError("--speed must be between 0.5 and 2.0")
-
-    import imageio_ffmpeg
-
-    ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
-    command = [
-        ffmpeg,
-        "-y",
-        "-hide_banner",
-        "-loglevel",
-        "error",
-        "-i",
-        str(wav_path),
-        "-af",
-        f"atempo={speed:.3f},loudnorm=I=-17:TP=-1.5:LRA=11",
-        "-codec:a",
-        "libmp3lame",
-        "-b:a",
-        "128k",
-        str(mp3_path),
-    ]
-    subprocess.run(command, check=True)
-
-
-def synthesize_file(
+async def convert_file(
     input_path: Path,
     output_path: Path,
-    torch,
-    model,
-    test_mode: bool,
-    speed: float,
+    voice: str,
+    rate: str,
+    volume: str,
+    pitch: str,
 ) -> None:
-    text = read_text_file(input_path)
-    blocks = split_question_blocks(text)
-    if test_mode:
-        blocks = blocks[:3]
-
-    if not blocks:
-        raise ValueError(f"No question/answer blocks found in: {input_path}")
-
-    print(f"\nInput:  {input_path.name}")
-    print(f"Blocks: {len(blocks)}")
-    print(f"Output: {output_path.name}")
-
-    with tempfile.TemporaryDirectory(prefix="uzbek_tts_") as temp_dir:
-        wav_path = Path(temp_dir) / f"{input_path.stem}.wav"
-
-        with wave.open(str(wav_path), "wb") as wav_file:
-            wav_file.setnchannels(1)
-            wav_file.setsampwidth(2)
-            wav_file.setframerate(SAMPLE_RATE)
-
-            for block_index, block in enumerate(blocks, start=1):
-                chunks = chunk_text(block)
-                print(
-                    f"\rSynthesizing question {block_index}/{len(blocks)}",
-                    end="",
-                    flush=True,
-                )
-
-                for chunk_index, chunk in enumerate(chunks):
-                    with torch.inference_mode():
-                        audio = model.apply_tts(
-                            text=chunk,
-                            speaker=SPEAKER,
-                            sample_rate=SAMPLE_RATE,
-                        )
-                    wav_file.writeframes(tensor_to_pcm16(audio))
-                    if chunk_index + 1 < len(chunks):
-                        wav_file.writeframes(silence_pcm(0.18))
-
-                wav_file.writeframes(silence_pcm(0.72))
-
-        print()
-        convert_wav_to_mp3(wav_path, output_path, speed)
-
-    print(f"Created: {output_path}")
+    text = read_text(input_path)
+    communicate = edge_tts.Communicate(
+        text=text,
+        voice=voice,
+        rate=rate,
+        volume=volume,
+        pitch=pitch,
+    )
+    await communicate.save(str(output_path))
 
 
 def main() -> int:
     args = parse_args()
 
     try:
-        check_dependencies()
-        desktop = (args.desktop or get_windows_desktop()).expanduser().resolve()
-        if not desktop.exists():
-            raise FileNotFoundError(f"Desktop folder not found: {desktop}")
+        if args.list_voices:
+            asyncio.run(list_voices(args.language))
+            return 0
 
-        print(f"Desktop folder:\n  {desktop}")
-        input_files = find_input_files(desktop)
+        if not args.inputs:
+            raise ValueError("Add at least one TXT file.")
 
-        cache_dir = Path.home() / ".cache" / "uzbek_tts"
-        model_path = cache_dir / MODEL_FILENAME
-        download_model(model_path)
-        torch, model = load_model(model_path)
+        files = collect_txt_files(args.inputs, args.recursive)
+        voice = asyncio.run(choose_voice(args.language, args.voice, args.gender))
+        print(f"Voice: {voice}")
 
-        for input_path in input_files:
-            suffix = "_TEST.mp3" if args.test else ".mp3"
-            output_path = desktop / f"{input_path.stem}{suffix}"
+        created = 0
+        skipped = 0
+
+        for input_path in files:
+            output_path = output_path_for(input_path, args, len(files))
 
             if output_path.exists() and not args.overwrite:
-                print(f"Skipping existing file: {output_path.name}")
+                print(f"Skip: {output_path} (use --overwrite to replace it)")
+                skipped += 1
                 continue
 
-            synthesize_file(
-                input_path=input_path,
-                output_path=output_path,
-                torch=torch,
-                model=model,
-                test_mode=args.test,
-                speed=args.speed,
+            print(f"Creating: {output_path}")
+            asyncio.run(
+                convert_file(
+                    input_path,
+                    output_path,
+                    voice,
+                    args.rate,
+                    args.volume,
+                    args.pitch,
+                )
             )
+            created += 1
 
-        print("\nAll requested MP3 files are on the Desktop.")
+        print(f"Finished. Created: {created}. Skipped: {skipped}.")
         return 0
 
     except KeyboardInterrupt:
-        print("\nCancelled by user.", file=sys.stderr)
+        print("Cancelled.", file=sys.stderr)
         return 130
-    except Exception as exc:
-        print(f"\nERROR: {exc}", file=sys.stderr)
+    except Exception as error:
+        print(f"ERROR: {error}", file=sys.stderr)
         return 1
 
 
